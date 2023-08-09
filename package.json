@@ -1,0 +1,42 @@
+{
+  "name": "deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": "18"
+  },
+  "scripts": {
+    "dev": "npx tsx src/server.ts",
+    "build": "tsup src",
+    "start": "node dist/server.js",
+    "up": "docker compose up -d",
+    "down": "docker compose down --remove-orphans -v",
+    "list": "docker container ls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YaGRRusso/node-deploy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/YaGRRusso/node-deploy/issues"
+  },
+  "homepage": "https://github.com/YaGRRusso/node-deploy#readme",
+  "devDependencies": {
+    "@types/node": "^20.4.9",
+    "@yagrrusso/eslint-config": "^1.0.0",
+    "eslint": "^8.46.0",
+    "prisma": "^5.1.1",
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.1.1",
+    "fastify": "^4.21.0",
+    "tsx": "^3.12.7",
+    "zod": "^3.21.4"
+  }
+}
