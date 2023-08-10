@@ -7,8 +7,9 @@
     "node": "18"
   },
   "scripts": {
-    "dev": "npx tsx src/server.ts",
+    "dev": "npx tsx watch src/server.ts",
     "build": "tsup src",
+    "migrate": "npx prisma migrate dev",
     "start": "node dist/server.js",
     "up": "docker compose up -d",
     "down": "docker compose down --remove-orphans -v",

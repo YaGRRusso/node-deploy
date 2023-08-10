@@ -1,6 +1,6 @@
 export interface Error {
     statusCode: number,
-    code: string,
+    code?: string,
     error: string,
     message: string
 }
