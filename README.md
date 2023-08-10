@@ -6,6 +6,9 @@ Deploy de API simples com Node, Postgres, Fastify e Zod
 ### GET /users
 Lista todos os usuário cadastrados no banco (o servidor não tem proteção de autenticação no POST, então o cadastro de usuário é livre para qualquer um)
 
+### GET /search?id&name&email&createdAt
+Lista todos os usuário cadastrados no banco com alguns filtros (id, name, email e createdAt)
+
 ### POST /users
 Adiciona um novo usuário ao banco (tem teste de input com Zod, então caso falte alguma informação ou não esteja no formato correto, espere por um erro)
 

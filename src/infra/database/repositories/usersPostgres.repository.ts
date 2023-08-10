@@ -8,6 +8,19 @@ export default (): UserRepository => {
         return await prisma.user.findMany()
     }
 
+    const searchUsers: UserRepository['searchUsers'] = async ({ createdAt, email, id, name }) => {
+        return await prisma.user.findMany({
+            where: {
+                AND: [
+                    id ? { id } : {},
+                    name ? { name: { contains: name } } : {},
+                    email ? { email: { contains: email } } : {},
+                    createdAt ? { createdAt } : {},
+                ],
+            },
+        })
+    }
+
     const deleteUser: UserRepository['deleteUser'] = async ({ id }) => {
         return await prisma.user.delete({
             where: {
@@ -26,6 +39,6 @@ export default (): UserRepository => {
     }
 
     return {
-        getUsers, deleteUser, createUser
+        getUsers, searchUsers, deleteUser, createUser
     }
 }
