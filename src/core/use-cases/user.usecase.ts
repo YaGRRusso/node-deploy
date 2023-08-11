@@ -1,35 +1,35 @@
-import { Error } from "@core/entities/logic/error.entity";
 import { UsecaseInput, UsecaseOutput } from "@core/entities/logic/usecase.entity";
 import { User } from "@core/entities/user.entity";
 import UserRepository, { createUserSchema, deleteUserSchema, searchUserSchema } from "@core/repositories/user.repository";
 
 export const getUsers = async ({ repository }: UsecaseInput<UserRepository>): UsecaseOutput<User[]> => {
-    return await repository.getUsers()
+    return { data: await repository.getUsers(), error: null }
 }
 
 export const searchUsers = async ({ repository, data }: UsecaseInput<UserRepository, unknown>): UsecaseOutput<User[]> => {
-    const searchedUsers = searchUserSchema.parse(data)
+    const parsedData = searchUserSchema.safeParse(data)
+    if (!parsedData.success) return { data: null, error: { code: parsedData.error.issues[0].message, status: 400 } }
+    const searchedUsers = parsedData.data
 
-    return await repository.searchUsers(searchedUsers)
+    return { data: await repository.searchUsers(searchedUsers), error: null }
 }
 
 export const createUser = async ({ repository, data }: UsecaseInput<UserRepository, unknown>): UsecaseOutput<User> => {
-    const newUser = createUserSchema.parse(data)
+    const parsedData = createUserSchema.safeParse(data)
+    if (!parsedData.success) return { data: null, error: { code: parsedData.error.issues[0].message, status: 400 } }
+    const newUser = parsedData.data
 
     const registeredUser = await repository.searchUsers({ email: newUser.email })
-    if (registeredUser.length) {
-        return {
-            message: `User email "${newUser.email}" already registered, try another email`,
-            error: 'Email Already Exists',
-            statusCode: 409
-        } as Error
-    }
+    if (registeredUser.length) return { data: null, error: { code: 'emailAlreadyExists', status: 409 } }
 
-    return await repository.createUser(newUser)
+
+    return { data: await repository.createUser(newUser), error: null }
 }
 
 export const deleteUser = async ({ repository, data }: UsecaseInput<UserRepository, unknown>): UsecaseOutput<User> => {
-    const oldUser = deleteUserSchema.parse(data)
+    const parsedData = deleteUserSchema.safeParse(data)
+    if (!parsedData.success) return { data: null, error: { code: parsedData.error.issues[0].message, status: 400 } }
+    const oldUser = parsedData.data
 
-    return await repository.deleteUser(oldUser)
+    return { data: await repository.deleteUser(oldUser), error: null }
 }

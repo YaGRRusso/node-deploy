@@ -20,6 +20,6 @@ type UsecaseInput<
 > = Data extends void ? UsecaseWithoutData<Repository>
   : UsecaseWithData<Repository, Data>;
 
-type UsecaseOutput<T = unknown> = Promise<T | Error>;
+type UsecaseOutput<T = unknown> = Promise<{ data: T | null, error: Error | null }>;
 
 export type { UsecaseInput, UsecaseOutput };
