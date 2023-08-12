@@ -4,6 +4,12 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient()
 
 export default (): UserRepository => {
+    const getUser: UserRepository['getUser'] = async ({ id }) => {
+        return await prisma.user.findUnique({
+            where: { id }
+        })
+    }
+
     const getUsers: UserRepository['getUsers'] = async () => {
         return await prisma.user.findMany()
     }
@@ -38,7 +44,20 @@ export default (): UserRepository => {
         })
     }
 
+    const updateUser: UserRepository['updateUser'] = async ({ id, email, name }) => {
+        const updatingData: { email?: string, name?: string } = {}
+        if (email) updatingData.email = email
+        if (name) updatingData.name = name
+
+        return await prisma.user.update({
+            where: {
+                id
+            },
+            data: updatingData
+        })
+    }
+
     return {
-        getUsers, searchUsers, deleteUser, createUser
+        getUser, getUsers, searchUsers, deleteUser, createUser, updateUser
     }
 }
